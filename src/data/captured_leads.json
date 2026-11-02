@@ -1,0 +1,32 @@
+[
+  {
+    "id": "NEXA-2026-342751",
+    "fullName": "Ananya Iyer",
+    "phone": "9845012345",
+    "qualification": "College Student / Graduate",
+    "targetCourse": "MCA (Cloud & Applied AI)",
+    "targetUniversity": "Manipal University Jaipur",
+    "source": "End-to-End Pipeline Verification",
+    "timestamp": "2026-11-02T10:29:55.647Z",
+    "ipHash": "::1"
+  },
+  {
+    "id": "NEXA-2026-177681",
+    "fullName": "i",
+    "phone": "9789870900",
+    "qualification": "PG Courses (Master's)",
+    "targetCourse": "B.Tech Engineering (Tech & Core)",
+    "source": "Nexa AI College Finder - uuhioh (Campus Full-Time)",
+    "timestamp": "2026-11-02T10:31:55.608Z",
+    "ipHash": "::1"
+  },
+  {
+    "id": "NEXA-2026-592646",
+    "fullName": "ytfh",
+    "phone": "9876543239",
+    "targetCourse": "BBA / Commerce",
+    "source": "Nexa Campus Chatbot - Campus Full-Time (Above ₹2.5 Lakhs)",
+    "timestamp": "2026-11-02T10:32:59.185Z",
+    "ipHash": "::1"
+  }
+]

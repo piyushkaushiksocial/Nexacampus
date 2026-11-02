@@ -119,13 +119,13 @@ export default function Dashboard() {
             </div>
 
             <a
-              href="https://wa.me/918369938760?text=Hi%20NEBSA,%20I%20scored%2094.6%%20in%20my%20quiz%20and%20want%20to%20know%20about%20my%20scholarship%20colleges."
+              href="https://wa.me/918825216881?text=Hi%20Harsh,%20I%20am%20exploring%20admissions%20on%20Nexa%20Campus%20and%20need%20scholarship%20guidance."
               target="_blank"
               rel="noopener noreferrer"
               className="w-full py-3.5 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs rounded-xl transition-colors flex items-center justify-center gap-2"
             >
               <MessageSquare className="w-4 h-4" />
-              Chat on WhatsApp
+              Chat with Harsh on WhatsApp
             </a>
           </div>
         </div>

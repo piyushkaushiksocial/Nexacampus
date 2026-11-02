@@ -50,25 +50,25 @@ export function RoiCalculator({ initialFee = 196000, initialProgramName = "Onlin
   };
 
   return (
-    <div className="bg-[#121212] border border-white/15 rounded-3xl p-6 md:p-8 relative overflow-hidden shadow-2xl">
+    <div className="bg-white border border-[#14171A]/12 rounded-3xl p-6 md:p-8 relative overflow-hidden shadow-[0_16px_40px_-8px_rgba(20,23,26,0.08)]">
       {/* Glow */}
-      <div className="absolute top-0 right-0 w-80 h-80 bg-[#FFE15D]/5 blur-[90px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-80 h-80 bg-[#BADFDB]/20 blur-[100px] pointer-events-none" />
 
       {/* Top Header */}
-      <div className="flex items-center justify-between border-b border-white/10 pb-5 mb-6">
+      <div className="flex items-center justify-between border-b border-[#14171A]/10 pb-5 mb-6">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#FFE15D]/15 border border-[#FFE15D]/30 flex items-center justify-center">
-            <Calculator className="w-5 h-5 text-[#FFE15D]" />
+          <div className="w-10 h-10 rounded-xl bg-[#FFA4A4] flex items-center justify-center">
+            <Calculator className="w-5 h-5 text-[#14171A]" />
           </div>
           <div>
-            <h3 className="text-xl font-semibold text-white tracking-tight flex items-center gap-2">
+            <h3 className="text-xl font-bold text-[#14171A] tracking-tight flex items-center gap-2">
               Fee & Monthly EMI Calculator
-              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#BADFDB] text-[#14171A]">
                 Interactive
               </span>
             </h3>
-            <p className="text-xs text-white/60">
-              Showing figures for: <span className="text-white font-medium">{initialProgramName}</span>
+            <p className="text-xs text-[#555E68] font-medium">
+              Showing figures for: <span className="text-[#14171A] font-bold">{initialProgramName}</span>
             </p>
           </div>
         </div>
@@ -76,7 +76,7 @@ export function RoiCalculator({ initialFee = 196000, initialProgramName = "Onlin
         {onClose && (
           <button
             onClick={onClose}
-            className="text-white/60 hover:text-white text-xs px-3 py-1.5 rounded-lg border border-white/15 hover:border-white/30 transition-colors"
+            className="text-[#555E68] hover:text-[#14171A] text-xs px-3 py-1.5 rounded-lg border border-[#14171A]/10 hover:border-[#14171A]/30 transition-colors font-medium"
           >
             Close
           </button>
@@ -89,32 +89,32 @@ export function RoiCalculator({ initialFee = 196000, initialProgramName = "Onlin
           
           {/* Preset Buttons */}
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs text-white/50 mr-1">Quick Examples:</span>
+            <span className="text-xs text-[#555E68] font-medium mr-1">Quick Presets:</span>
             <button
               onClick={() => { setCourseFee(196000); setCurrentCtc(450000); setTargetCtc(980000); setScholarshipPercent(40); }}
-              className="text-xs px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/15 text-white/80 border border-white/10 transition-colors"
+              className="text-xs px-2.5 py-1 rounded-lg bg-[#FCF9EA] hover:bg-[#FFA4A4]/40 text-[#14171A] border border-[#14171A]/10 font-medium transition-colors"
             >
               Online MBA
             </button>
             <button
               onClick={() => { setCourseFee(158000); setCurrentCtc(400000); setTargetCtc(840000); setScholarshipPercent(50); }}
-              className="text-xs px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/15 text-white/80 border border-white/10 transition-colors"
+              className="text-xs px-2.5 py-1 rounded-lg bg-[#FCF9EA] hover:bg-[#FFA4A4]/40 text-[#14171A] border border-[#14171A]/10 font-medium transition-colors"
             >
               Online MCA (Tech)
             </button>
             <button
               onClick={() => { setCourseFee(240000); setCurrentCtc(800000); setTargetCtc(1450000); setScholarshipPercent(50); }}
-              className="text-xs px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/15 text-white/80 border border-white/10 transition-colors"
+              className="text-xs px-2.5 py-1 rounded-lg bg-[#FCF9EA] hover:bg-[#FFA4A4]/40 text-[#14171A] border border-[#14171A]/10 font-medium transition-colors"
             >
               Executive 1-Year MBA
             </button>
           </div>
 
           {/* Slider 1: Total College Fee */}
-          <div className="bg-black/50 border border-white/10 rounded-2xl p-4">
+          <div className="bg-[#FCF9EA] border border-[#14171A]/10 rounded-2xl p-4">
             <div className="flex justify-between items-center mb-2">
-              <label className="text-xs text-white/70 font-medium">Standard College Fees</label>
-              <span className="text-sm font-semibold text-white">{formatInr(courseFee)}</span>
+              <label className="text-xs text-[#555E68] font-bold">Standard College Fees</label>
+              <span className="text-sm font-bold text-[#14171A]">{formatInr(courseFee)}</span>
             </div>
             <input
               type="range"
@@ -123,9 +123,9 @@ export function RoiCalculator({ initialFee = 196000, initialProgramName = "Onlin
               step={5000}
               value={courseFee}
               onChange={(e) => setCourseFee(Number(e.target.value))}
-              className="w-full accent-[#FFE15D] cursor-pointer"
+              className="w-full accent-[#14171A] cursor-pointer"
             />
-            <div className="flex justify-between text-[11px] text-white/40 mt-1">
+            <div className="flex justify-between text-[11px] text-[#8A929B] font-mono mt-1">
               <span>₹75,000</span>
               <span>₹2.5 Lakhs</span>
               <span>₹5 Lakhs</span>
@@ -133,13 +133,13 @@ export function RoiCalculator({ initialFee = 196000, initialProgramName = "Onlin
           </div>
 
           {/* Slider 2: Scholarship Discount */}
-          <div className="bg-[#FFE15D]/5 border border-[#FFE15D]/25 rounded-2xl p-4">
+          <div className="bg-[#BADFDB]/30 border border-[#BADFDB] rounded-2xl p-4">
             <div className="flex justify-between items-center mb-2">
-              <label className="text-xs text-[#FFE15D] font-medium flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5" />
-                Scholarship Discount on Fees
+              <label className="text-xs text-[#14171A] font-bold flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-[#14171A]" />
+                Institutional Scholarship Subsidy
               </label>
-              <span className="text-sm font-bold text-[#FFE15D]">{scholarshipPercent}% Scholarship</span>
+              <span className="text-sm font-black text-[#14171A]">{scholarshipPercent}% Grant</span>
             </div>
             <input
               type="range"
@@ -148,9 +148,9 @@ export function RoiCalculator({ initialFee = 196000, initialProgramName = "Onlin
               step={5}
               value={scholarshipPercent}
               onChange={(e) => setScholarshipPercent(Number(e.target.value))}
-              className="w-full accent-[#FFE15D] cursor-pointer"
+              className="w-full accent-[#14171A] cursor-pointer"
             />
-            <div className="flex justify-between text-[11px] text-white/50 mt-1">
+            <div className="flex justify-between text-[11px] text-[#555E68] font-mono mt-1">
               <span>0% (Standard)</span>
               <span>40% (Average)</span>
               <span>75% (Merit Score)</span>
@@ -160,10 +160,10 @@ export function RoiCalculator({ initialFee = 196000, initialProgramName = "Onlin
           {/* 2-Col: Salaries */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Current Salary */}
-            <div className="bg-black/50 border border-white/10 rounded-2xl p-4">
+            <div className="bg-[#FCF9EA] border border-[#14171A]/10 rounded-2xl p-4">
               <div className="flex justify-between items-center mb-2">
-                <label className="text-xs text-white/70 font-medium">Your Current Salary (Annual)</label>
-                <span className="text-xs font-semibold text-white">{formatInr(currentCtc)}</span>
+                <label className="text-xs text-[#555E68] font-bold">Your Current Salary (Annual)</label>
+                <span className="text-xs font-bold text-[#14171A]">{formatInr(currentCtc)}</span>
               </div>
               <input
                 type="range"
@@ -172,16 +172,16 @@ export function RoiCalculator({ initialFee = 196000, initialProgramName = "Onlin
                 step={25000}
                 value={currentCtc}
                 onChange={(e) => setCurrentCtc(Number(e.target.value))}
-                className="w-full accent-white cursor-pointer"
+                className="w-full accent-[#14171A] cursor-pointer"
               />
-              <span className="text-[11px] text-white/40 block mt-1">Per year before degree</span>
+              <span className="text-[11px] text-[#8A929B] block mt-1">Per year before degree</span>
             </div>
 
             {/* Target Salary */}
-            <div className="bg-black/50 border border-white/10 rounded-2xl p-4">
+            <div className="bg-[#FCF9EA] border border-[#14171A]/10 rounded-2xl p-4">
               <div className="flex justify-between items-center mb-2">
-                <label className="text-xs text-white/70 font-medium">Expected Salary (Annual)</label>
-                <span className="text-xs font-semibold text-emerald-400">{formatInr(targetCtc)}</span>
+                <label className="text-xs text-[#555E68] font-bold">Expected Salary (Annual)</label>
+                <span className="text-xs font-bold text-emerald-700">{formatInr(targetCtc)}</span>
               </div>
               <input
                 type="range"
@@ -190,26 +190,26 @@ export function RoiCalculator({ initialFee = 196000, initialProgramName = "Onlin
                 step={25000}
                 value={targetCtc}
                 onChange={(e) => setTargetCtc(Number(e.target.value))}
-                className="w-full accent-emerald-400 cursor-pointer"
+                className="w-full accent-emerald-600 cursor-pointer"
               />
-              <span className="text-[11px] text-emerald-400 block mt-1 font-medium">
+              <span className="text-[11px] text-emerald-700 block mt-1 font-bold">
                 +{salaryHikePercent}% Salary Increase
               </span>
             </div>
           </div>
 
           {/* EMI Tenure Select */}
-          <div className="flex items-center justify-between text-xs text-white/70 pt-1">
-            <span>Choose 0% Interest EMI Plan:</span>
+          <div className="flex items-center justify-between text-xs text-[#555E68] pt-1">
+            <span className="font-bold">Choose 0% Interest EMI Plan:</span>
             <div className="flex gap-2">
               {[12, 18, 24, 36].map((t) => (
                 <button
                   key={t}
                   onClick={() => setTenureMonths(t)}
-                  className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors ${
+                  className={`px-3 py-1.5 rounded-lg border text-xs font-bold transition-colors ${
                     tenureMonths === t
-                      ? "bg-white text-black border-white font-bold"
-                      : "bg-white/5 text-white/70 border-white/15 hover:border-white/30"
+                      ? "bg-[#14171A] text-[#FCF9EA] border-[#14171A]"
+                      : "bg-[#FCF9EA] text-[#555E68] border-[#14171A]/10 hover:border-[#14171A]/30"
                   }`}
                 >
                   {t} Months
@@ -220,53 +220,53 @@ export function RoiCalculator({ initialFee = 196000, initialProgramName = "Onlin
         </div>
 
         {/* Right: Calculated Metrics Display (5 cols) */}
-        <div className="lg:col-span-5 flex flex-col justify-between bg-black/70 border border-white/15 rounded-2xl p-6">
+        <div className="lg:col-span-5 flex flex-col justify-between bg-[#FCF9EA] border border-[#14171A]/10 rounded-2xl p-6">
           <div className="space-y-5">
             <div>
-              <span className="text-xs text-white/50 block mb-1">
+              <span className="text-xs text-[#555E68] font-bold block mb-1">
                 Final Fees You Pay (After Scholarship)
               </span>
-              <div className="text-3xl font-bold text-white flex items-baseline gap-2">
+              <div className="text-3xl font-black text-[#14171A] flex items-baseline gap-2">
                 {formatInr(effectiveFee)}
                 {scholarshipPercent > 0 && (
-                  <span className="text-xs font-normal text-white/40 line-through">
+                  <span className="text-xs font-normal text-[#8A929B] line-through">
                     {formatInr(courseFee)}
                   </span>
                 )}
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 pt-3 border-t border-white/10">
-              <div className="bg-white/5 rounded-xl p-3 border border-white/5">
-                <span className="text-[11px] text-white/60 block mb-1">
+            <div className="grid grid-cols-2 gap-3 pt-3 border-t border-[#14171A]/10">
+              <div className="bg-white rounded-xl p-3 border border-[#14171A]/10">
+                <span className="text-[11px] text-[#555E68] font-bold block mb-1">
                   Monthly EMI (0% Interest)
                 </span>
-                <span className="text-lg font-bold text-[#FFE15D]">
+                <span className="text-lg font-black text-[#14171A]">
                   {formatInr(monthlyEmi)}
                 </span>
-                <span className="text-[10px] text-white/40 block mt-0.5">for {tenureMonths} months</span>
+                <span className="text-[10px] text-[#8A929B] block mt-0.5">for {tenureMonths} months</span>
               </div>
 
-              <div className="bg-white/5 rounded-xl p-3 border border-white/5">
-                <span className="text-[11px] text-white/60 block mb-1">
+              <div className="bg-white rounded-xl p-3 border border-[#14171A]/10">
+                <span className="text-[11px] text-[#555E68] font-bold block mb-1">
                   Fees Recovered In
                 </span>
-                <span className="text-lg font-bold text-emerald-400">
+                <span className="text-lg font-black text-emerald-700">
                   {paybackPeriodMonths} Months
                 </span>
-                <span className="text-[10px] text-white/40 block mt-0.5">from salary hike</span>
+                <span className="text-[10px] text-[#8A929B] block mt-0.5">from salary hike</span>
               </div>
             </div>
 
-            <div className="bg-emerald-500/10 border border-emerald-500/25 rounded-xl p-4">
+            <div className="bg-white border border-emerald-600/20 rounded-xl p-4">
               <div className="flex items-center gap-2 mb-1">
-                <TrendingUp className="w-4 h-4 text-emerald-400" />
-                <span className="text-xs font-bold text-emerald-300">Extra Earnings in 3 Years</span>
+                <TrendingUp className="w-4 h-4 text-emerald-600" />
+                <span className="text-xs font-bold text-emerald-700">Extra Earnings in 3 Years</span>
               </div>
-              <div className="text-2xl font-bold text-emerald-400">
+              <div className="text-2xl font-black text-emerald-700">
                 +{formatInr(threeYearNetGain)}
               </div>
-              <p className="text-[11px] text-emerald-300/80 mt-1 leading-normal">
+              <p className="text-[11px] text-[#555E68] mt-1 leading-normal font-medium">
                 Total extra money you earn in 3 years even after paying your full college fees.
               </p>
             </div>
@@ -274,13 +274,18 @@ export function RoiCalculator({ initialFee = 196000, initialProgramName = "Onlin
 
           {/* Action Button */}
           <div className="pt-6">
-            <Link href="/exam/diagnostic">
-              <button className="w-full py-3.5 bg-[#FFE15D] text-black font-semibold text-xs tracking-wide rounded-xl hover:bg-white transition-colors flex items-center justify-center gap-2">
-                <ShieldCheck className="w-4 h-4" />
-                Apply for {scholarshipPercent}% Scholarship (Free Quiz)
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </Link>
+            <button 
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  window.location.href = "/colleges";
+                }
+              }}
+              className="w-full py-3.5 bg-[#14171A] text-[#FCF9EA] hover:bg-[#FFA4A4] hover:text-[#14171A] font-bold text-xs tracking-wide rounded-xl transition-all flex items-center justify-center gap-2 shadow-xs"
+            >
+              <ShieldCheck className="w-4 h-4" />
+              Explore Colleges with {scholarshipPercent}% Scholarship
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
           </div>
         </div>
       </div>

@@ -1,23 +1,29 @@
 @import "tailwindcss";
 
 @theme {
-  --color-sun-gold: #FFE15D;
-  --color-amber-energy: #F49D1A;
-  --color-crimson: #DC3535;
-  --color-royal-plum: #B01E68;
-  --color-surface-dark: #120914;
-  --color-surface-light: #FAF6F0;
+  --color-cream: #FCF9EA;
+  --color-cream-soft: #F6F2DE;
+  --color-cream-card: #FFFFFF;
+  --color-mint: #BADFDB;
+  --color-coral: #FFA4A4;
+  --color-blush: #FFBDBD;
   
-  --shadow-gold-glow: 0 0 28px -4px rgba(255, 225, 93, 0.45);
-  --shadow-amber-lift: 0 12px 32px -8px rgba(244, 157, 26, 0.35);
-  --shadow-plum-surface: 0 20px 48px -12px rgba(176, 30, 104, 0.25);
-  --shadow-tactile-focus: 0 0 0 3px rgba(244, 157, 26, 0.4);
+  --color-charcoal: #14171A;
+  --color-charcoal-muted: #555E68;
+  --color-charcoal-subtle: #8A929B;
+  
+  --shadow-warm-sm: 0 2px 8px -1px rgba(20, 23, 26, 0.06);
+  --shadow-warm-md: 0 10px 25px -4px rgba(20, 23, 26, 0.07), 0 4px 10px -2px rgba(20, 23, 26, 0.03);
+  --shadow-warm-lg: 0 20px 40px -10px rgba(20, 23, 26, 0.1), 0 8px 16px -4px rgba(20, 23, 26, 0.04);
+  --shadow-coral-glow: 0 8px 24px -4px rgba(255, 164, 164, 0.45);
+  --shadow-mint-glow: 0 8px 24px -4px rgba(186, 223, 219, 0.5);
+  --shadow-tactile-focus: 0 0 0 3px rgba(255, 164, 164, 0.5);
 }
 
 @layer base {
   :root {
-    --background: var(--color-surface-dark);
-    --foreground: var(--color-surface-light);
+    --background: #FCF9EA;
+    --foreground: #14171A;
   }
 
   body {
@@ -28,9 +34,25 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Prevent outline on focus but provide tactile shadow for accessibility */
+  /* Prevent harsh default focus rings, provide tactile soft glow */
   *:focus-visible {
     outline: none;
     box-shadow: var(--shadow-tactile-focus);
+  }
+
+  /* Smooth scrollbar styling for light theme */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #FCF9EA;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #DDD5BE;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #BADFDB;
   }
 }

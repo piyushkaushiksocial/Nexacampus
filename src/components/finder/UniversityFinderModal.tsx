@@ -13,11 +13,14 @@ import {
   GraduationCap, 
   Calendar,
   Wallet,
-  Scale
+  Scale,
+  ShieldCheck
 } from "lucide-react";
 import { PROGRAMS_DATA, Program } from "@/data/programs";
 import Link from "next/link";
 import { useCompare } from "@/context/CompareContext";
+import { sound } from "@/lib/sound";
+import { submitLead, validateIndianPhone } from "@/lib/leads";
 
 interface UniversityFinderModalProps {
   isOpen: boolean;
@@ -33,9 +36,9 @@ export function UniversityFinderModal({ isOpen, onClose, defaultDegree }: Univer
 
   // User selections
   const [selectedDegreeLevel, setSelectedDegreeLevel] = useState<string>(defaultDegree || "PG Courses (Master's)");
-  const [selectedProgram, setSelectedProgram] = useState<string>("Online MBA");
+  const [selectedProgram, setSelectedProgram] = useState<string>("MBA (Management & Tech)");
   const [selectedBudget, setSelectedBudget] = useState<string>("₹1.5 Lakhs - ₹2.5 Lakhs");
-  const [selectedStudyMode, setSelectedStudyMode] = useState<string>("100% Online (Work & Study)");
+  const [selectedStudyMode, setSelectedStudyMode] = useState<string>("Campus Full-Time");
 
   // Lead Data
   const [fullName, setFullName] = useState<string>("");
@@ -45,46 +48,52 @@ export function UniversityFinderModal({ isOpen, onClose, defaultDegree }: Univer
 
   // Filter matched programs based on selections
   const matchedPrograms = PROGRAMS_DATA.filter((p) => {
-    if (selectedProgram === "Online MBA") return p.category === "Management";
-    if (selectedProgram.includes("MCA")) return p.category === "Technology & AI";
+    if (selectedProgram.includes("MBA")) return p.category === "Management";
+    if (selectedProgram.includes("MCA") || selectedProgram.includes("BCA")) return p.category === "Technology & AI";
     if (selectedProgram.includes("BBA")) return p.category === "Commerce & Finance";
     if (selectedProgram.includes("B.Tech")) return p.category === "Engineering";
     return true;
   }).slice(0, 3);
 
   const handleNext = () => {
+    sound.snap();
     if (step < 4) {
       setStep((prev) => prev + 1);
     }
   };
 
-  const handleLeadSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!phone || !fullName) return;
+  const [formError, setFormError] = useState("");
 
+  const handleLeadSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormError("");
+
+    const { isValid, cleanPhone, error } = validateIndianPhone(phone);
+    if (!isValid) {
+      setFormError(error || "Enter a valid 10-digit mobile number.");
+      sound.tick();
+      return;
+    }
+
+    if (!fullName.trim()) {
+      setFormError("Please enter your name.");
+      return;
+    }
+
+    sound.snap();
     setIsSubmitting(true);
 
-    try {
-      const existing = localStorage.getItem("nebsa_captured_leads");
-      const list = existing ? JSON.parse(existing) : [];
-      list.push({
-        fullName,
-        phone,
-        city,
-        degreeLevel: selectedDegreeLevel,
-        targetCourse: selectedProgram,
-        budget: selectedBudget,
-        studyMode: selectedStudyMode,
-        source: "AI Course & College Finder (2-Min Wizard)",
-        timestamp: new Date().toISOString()
-      });
-      localStorage.setItem("nebsa_captured_leads", JSON.stringify(list));
-    } catch {}
+    await submitLead({
+      fullName: fullName.trim(),
+      phone: cleanPhone,
+      qualification: selectedDegreeLevel,
+      targetCourse: selectedProgram,
+      source: `Nexa AI College Finder - ${city || "All India"} (${selectedStudyMode})`,
+    });
 
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setStep(5); // Show instant tailored matches!
-    }, 600);
+    sound.chime();
+    setIsSubmitting(false);
+    setStep(5); // Show instant tailored matches!
   };
 
   const handleReset = () => {
@@ -105,7 +114,7 @@ export function UniversityFinderModal({ isOpen, onClose, defaultDegree }: Univer
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/85 backdrop-blur-md"
+            className="fixed inset-0 bg-[#14171A]/40 backdrop-blur-sm"
           />
 
           {/* Modal Card */}
@@ -113,15 +122,15 @@ export function UniversityFinderModal({ isOpen, onClose, defaultDegree }: Univer
             initial={{ scale: 0.95, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 20 }}
-            className="relative w-full max-w-xl bg-[#121212] border border-white/20 rounded-3xl p-6 sm:p-8 shadow-2xl z-10 overflow-hidden"
+            className="relative w-full max-w-xl bg-white border border-[#14171A]/12 rounded-3xl p-6 sm:p-8 shadow-[0_24px_60px_-10px_rgba(20,23,26,0.18)] z-10 overflow-hidden text-[#14171A]"
           >
-            {/* Top ambient gold glow */}
-            <div className="absolute top-0 right-0 w-80 h-80 bg-[#FFE15D]/5 blur-[90px] pointer-events-none" />
+            {/* Top ambient glow */}
+            <div className="absolute top-0 right-0 w-80 h-80 bg-[#BADFDB]/30 blur-[90px] pointer-events-none" />
 
             {/* Close Button */}
             <button
               onClick={onClose}
-              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/50 hover:text-white transition-colors"
+              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#FCF9EA] hover:bg-[#FFA4A4] flex items-center justify-center text-[#555E68] hover:text-[#14171A] transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -129,16 +138,16 @@ export function UniversityFinderModal({ isOpen, onClose, defaultDegree }: Univer
             {/* Step Progress Indicator (Steps 1 to 4) */}
             {step < 5 && (
               <div className="mb-6">
-                <div className="flex items-center justify-between text-xs text-white/50 mb-2 font-medium">
-                  <span className="text-[#FFE15D] flex items-center gap-1.5 font-semibold">
-                    <Sparkles className="w-3.5 h-3.5" />
+                <div className="flex items-center justify-between text-xs text-[#555E68] mb-2 font-bold">
+                  <span className="text-[#14171A] flex items-center gap-1.5 font-bold">
+                    <Sparkles className="w-3.5 h-3.5 text-[#FFA4A4]" />
                     AI College Finder • Step {step} of 4
                   </span>
                   <span>{step * 25}% Completed</span>
                 </div>
-                <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                <div className="h-1.5 bg-[#FCF9EA] border border-[#14171A]/10 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-[#FFE15D] transition-all duration-300" 
+                    className="h-full bg-[#FFA4A4] transition-all duration-300" 
                     style={{ width: `${step * 25}%` }}
                   />
                 </div>
@@ -149,10 +158,10 @@ export function UniversityFinderModal({ isOpen, onClose, defaultDegree }: Univer
             {step === 1 && (
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-xl sm:text-2xl font-semibold text-white tracking-tight">
+                  <h3 className="text-xl sm:text-2xl font-black text-[#14171A] tracking-tight">
                     Which degree level are you looking for?
                   </h3>
-                  <p className="text-xs text-white/60 mt-1">
+                  <p className="text-xs text-[#555E68] mt-1 font-medium">
                     Select your degree stage to filter approved universities and eligibility.
                   </p>
                 </div>
@@ -168,20 +177,21 @@ export function UniversityFinderModal({ isOpen, onClose, defaultDegree }: Univer
                       key={item.title}
                       type="button"
                       onClick={() => {
+                        sound.tick();
                         setSelectedDegreeLevel(item.title);
                         setStep(2);
                       }}
                       className={`w-full p-4 rounded-2xl border text-left transition-all flex items-center justify-between ${
                         selectedDegreeLevel === item.title
-                          ? "bg-[#FFE15D]/10 border-[#FFE15D] text-white"
-                          : "bg-white/[0.03] border-white/10 hover:border-white/25 text-white/80 hover:bg-white/5"
+                          ? "bg-[#BADFDB]/40 border-[#BADFDB] text-[#14171A] font-bold shadow-xs"
+                          : "bg-[#FCF9EA] border-[#14171A]/10 hover:border-[#14171A]/25 text-[#14171A] hover:bg-white"
                       }`}
                     >
                       <div>
-                        <span className="text-sm font-semibold text-white block">{item.title}</span>
-                        <span className="text-xs text-white/50">{item.desc}</span>
+                        <span className="text-sm font-bold text-[#14171A] block">{item.title}</span>
+                        <span className="text-xs text-[#555E68] font-medium">{item.desc}</span>
                       </div>
-                      <ArrowRight className="w-4 h-4 text-[#FFE15D] shrink-0" />
+                      <ArrowRight className="w-4 h-4 text-[#14171A] shrink-0" />
                     </button>
                   ))}
                 </div>
@@ -192,34 +202,35 @@ export function UniversityFinderModal({ isOpen, onClose, defaultDegree }: Univer
             {step === 2 && (
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-xl sm:text-2xl font-semibold text-white tracking-tight">
+                  <h3 className="text-xl sm:text-2xl font-black text-[#14171A] tracking-tight">
                     Select your target course
                   </h3>
-                  <p className="text-xs text-white/60 mt-1">
+                  <p className="text-xs text-[#555E68] mt-1 font-medium">
                     What field do you want to specialize in?
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
                   {[
-                    "Online MBA (Marketing / Finance / HR)",
-                    "Online MCA (Cloud Computing & AI)",
-                    "Online BBA (Business & Startups)",
-                    "Online BCA (Software Development)",
-                    "Executive MBA (Senior Leadership)",
-                    "B.Tech Engineering (Infrastructure / Tech)"
+                    "MBA (Marketing / Finance / HR)",
+                    "MCA (Cloud Computing & AI)",
+                    "BBA (Business & Startups)",
+                    "BCA (Software Development)",
+                    "Executive MBA (Leadership)",
+                    "B.Tech Engineering (Tech & Core)"
                   ].map((course) => (
                     <button
                       key={course}
                       type="button"
                       onClick={() => {
+                        sound.tick();
                         setSelectedProgram(course);
                         setStep(3);
                       }}
-                      className={`p-3.5 rounded-2xl border text-left text-xs font-semibold transition-all ${
+                      className={`p-3.5 rounded-2xl border text-left text-xs font-bold transition-all ${
                         selectedProgram === course
-                          ? "bg-[#FFE15D] text-black border-[#FFE15D]"
-                          : "bg-white/[0.03] border-white/10 hover:border-white/30 text-white"
+                          ? "bg-[#FFA4A4] text-[#14171A] border-[#FFA4A4] shadow-xs"
+                          : "bg-[#FCF9EA] border-[#14171A]/10 hover:border-[#14171A]/30 text-[#14171A] hover:bg-white"
                       }`}
                     >
                       {course}
@@ -227,16 +238,22 @@ export function UniversityFinderModal({ isOpen, onClose, defaultDegree }: Univer
                   ))}
                 </div>
 
-                <div className="pt-4 flex justify-between items-center border-t border-white/10">
+                <div className="pt-4 flex justify-between items-center border-t border-[#14171A]/10">
                   <button
-                    onClick={() => setStep(1)}
-                    className="text-xs text-white/50 hover:text-white"
+                    onClick={() => {
+                      sound.tick();
+                      setStep(1);
+                    }}
+                    className="text-xs text-[#555E68] hover:text-[#14171A] font-bold"
                   >
                     ← Back
                   </button>
                   <button
-                    onClick={() => setStep(3)}
-                    className="px-5 py-2.5 bg-white text-black font-semibold text-xs rounded-xl hover:bg-[#FFE15D] transition-colors"
+                    onClick={() => {
+                      sound.tick();
+                      setStep(3);
+                    }}
+                    className="px-5 py-2.5 bg-[#14171A] text-[#FCF9EA] font-bold text-xs rounded-xl hover:bg-[#FFA4A4] hover:text-[#14171A] transition-colors"
                   >
                     Continue →
                   </button>
@@ -248,16 +265,16 @@ export function UniversityFinderModal({ isOpen, onClose, defaultDegree }: Univer
             {step === 3 && (
               <div className="space-y-5">
                 <div>
-                  <h3 className="text-xl sm:text-2xl font-semibold text-white tracking-tight">
+                  <h3 className="text-xl sm:text-2xl font-black text-[#14171A] tracking-tight">
                     What is your approximate budget & study format?
                   </h3>
-                  <p className="text-xs text-white/60 mt-1">
+                  <p className="text-xs text-[#555E68] mt-1 font-medium">
                     We match colleges where fees fit your comfort range with 0% interest EMI options.
                   </p>
                 </div>
 
                 <div>
-                  <label className="text-xs font-medium text-white/70 block mb-2">Total Course Budget</label>
+                  <label className="text-xs font-bold text-[#14171A] block mb-2">Total Course Budget</label>
                   <div className="grid grid-cols-2 gap-2">
                     {[
                       "Under ₹1.2 Lakhs",
@@ -268,11 +285,14 @@ export function UniversityFinderModal({ isOpen, onClose, defaultDegree }: Univer
                       <button
                         key={b}
                         type="button"
-                        onClick={() => setSelectedBudget(b)}
-                        className={`p-3 rounded-xl border text-xs font-medium transition-all ${
+                        onClick={() => {
+                          sound.tick();
+                          setSelectedBudget(b);
+                        }}
+                        className={`p-3 rounded-xl border text-xs font-bold transition-all ${
                           selectedBudget === b
-                            ? "bg-white text-black border-white font-semibold"
-                            : "bg-white/5 border-white/10 text-white/70 hover:border-white/20"
+                            ? "bg-[#BADFDB] text-[#14171A] border-[#BADFDB] shadow-xs"
+                            : "bg-[#FCF9EA] border-[#14171A]/10 text-[#555E68] hover:text-[#14171A]"
                         }`}
                       >
                         {b}
@@ -282,20 +302,23 @@ export function UniversityFinderModal({ isOpen, onClose, defaultDegree }: Univer
                 </div>
 
                 <div>
-                  <label className="text-xs font-medium text-white/70 block mb-2">Preferred Study Mode</label>
+                  <label className="text-xs font-bold text-[#14171A] block mb-2">Preferred Study Mode</label>
                   <div className="grid grid-cols-2 gap-2">
                     {[
-                      "100% Online (Work & Study)",
-                      "Campus Regular Full-Time"
+                      "Campus Full-Time",
+                      "Flexible / Hybrid Learning"
                     ].map((m) => (
                       <button
                         key={m}
                         type="button"
-                        onClick={() => setSelectedStudyMode(m)}
-                        className={`p-3 rounded-xl border text-xs font-medium transition-all ${
+                        onClick={() => {
+                          sound.tick();
+                          setSelectedStudyMode(m);
+                        }}
+                        className={`p-3 rounded-xl border text-xs font-bold transition-all ${
                           selectedStudyMode === m
-                            ? "bg-[#FFE15D]/20 border-[#FFE15D] text-[#FFE15D] font-semibold"
-                            : "bg-white/5 border-white/10 text-white/70 hover:border-white/20"
+                            ? "bg-[#FFA4A4] text-[#14171A] border-[#FFA4A4] shadow-xs"
+                            : "bg-[#FCF9EA] border-[#14171A]/10 text-[#555E68] hover:text-[#14171A]"
                         }`}
                       >
                         {m}
@@ -304,16 +327,22 @@ export function UniversityFinderModal({ isOpen, onClose, defaultDegree }: Univer
                   </div>
                 </div>
 
-                <div className="pt-2 flex justify-between items-center border-t border-white/10">
+                <div className="pt-2 flex justify-between items-center border-t border-[#14171A]/10">
                   <button
-                    onClick={() => setStep(2)}
-                    className="text-xs text-white/50 hover:text-white"
+                    onClick={() => {
+                      sound.tick();
+                      setStep(2);
+                    }}
+                    className="text-xs text-[#555E68] hover:text-[#14171A] font-bold"
                   >
                     ← Back
                   </button>
                   <button
-                    onClick={() => setStep(4)}
-                    className="px-6 py-2.5 bg-[#FFE15D] text-black font-semibold text-xs rounded-xl hover:bg-white transition-colors"
+                    onClick={() => {
+                      sound.tick();
+                      setStep(4);
+                    }}
+                    className="px-6 py-2.5 bg-[#14171A] text-[#FCF9EA] font-bold text-xs rounded-xl hover:bg-[#FFA4A4] hover:text-[#14171A] transition-colors"
                   >
                     Next: View My Matched Colleges →
                   </button>
@@ -325,54 +354,54 @@ export function UniversityFinderModal({ isOpen, onClose, defaultDegree }: Univer
             {step === 4 && (
               <form onSubmit={handleLeadSubmit} className="space-y-4">
                 <div>
-                  <span className="text-xs font-semibold uppercase tracking-wider text-[#FFE15D] mb-1 block">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#14171A] bg-[#FFA4A4]/50 px-3 py-1 rounded-full border border-[#14171A]/10 mb-2 inline-block">
                     Almost Done!
                   </span>
-                  <h3 className="text-xl sm:text-2xl font-semibold text-white tracking-tight leading-snug">
+                  <h3 className="text-xl sm:text-2xl font-black text-[#14171A] tracking-tight leading-snug">
                     Where should we send your matched college list & fee guide?
                   </h3>
-                  <p className="text-xs text-white/60 mt-1">
-                    Get the 3 best-fit approved universities for <span className="text-white font-semibold">{selectedProgram}</span> sent straight to your WhatsApp.
+                  <p className="text-xs text-[#555E68] mt-1 font-medium">
+                    Get the 3 best-fit approved universities for <span className="text-[#14171A] font-bold">{selectedProgram}</span> sent straight to your WhatsApp.
                   </p>
                 </div>
 
                 <div className="space-y-3 pt-2">
                   <div>
-                    <label className="text-xs font-medium text-white/80 block mb-1">
+                    <label className="text-xs font-bold text-[#14171A] block mb-1">
                       Your Full Name *
                     </label>
-                    <div className="flex items-center bg-black/60 border border-white/15 rounded-xl px-3.5 py-2.5 focus-within:border-[#FFE15D]">
-                      <User className="w-4 h-4 text-white/40 mr-2 shrink-0" />
+                    <div className="flex items-center bg-[#FCF9EA] border border-[#14171A]/10 rounded-xl px-3.5 py-2.5 focus-within:ring-2 focus-within:ring-[#FFA4A4]">
+                      <User className="w-4 h-4 text-[#8A929B] mr-2 shrink-0" />
                       <input
                         type="text"
                         required
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         placeholder="e.g. Rahul Sharma"
-                        className="bg-transparent border-none outline-none text-xs text-white placeholder:text-white/40 w-full"
+                        className="bg-transparent border-none outline-none text-xs text-[#14171A] font-bold placeholder:text-[#8A929B] w-full"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="text-xs font-medium text-white/80 block mb-1">
+                    <label className="text-xs font-bold text-[#14171A] block mb-1">
                       WhatsApp Number (for instant brochure & fee breakdown) *
                     </label>
-                    <div className="flex items-center bg-black/60 border border-white/15 rounded-xl px-3.5 py-2.5 focus-within:border-[#FFE15D]">
-                      <span className="text-white/40 text-xs mr-2 font-mono">+91</span>
+                    <div className="flex items-center bg-[#FCF9EA] border border-[#14171A]/10 rounded-xl px-3.5 py-2.5 focus-within:ring-2 focus-within:ring-[#FFA4A4]">
+                      <span className="text-[#8A929B] text-xs mr-2 font-mono font-bold">+91</span>
                       <input
                         type="tel"
                         required
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="98765 43210"
-                        className="bg-transparent border-none outline-none text-xs text-white placeholder:text-white/40 w-full"
+                        className="bg-transparent border-none outline-none text-xs text-[#14171A] font-bold placeholder:text-[#8A929B] w-full"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="text-xs font-medium text-white/80 block mb-1">
+                    <label className="text-xs font-bold text-[#14171A] block mb-1">
                       Your Current City
                     </label>
                     <input
@@ -380,8 +409,19 @@ export function UniversityFinderModal({ isOpen, onClose, defaultDegree }: Univer
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
                       placeholder="e.g. Mumbai, Delhi, Bangalore"
-                      className="w-full bg-black/60 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder:text-white/40 focus:outline-none focus:border-[#FFE15D]"
+                      className="w-full bg-[#FCF9EA] border border-[#14171A]/10 rounded-xl px-3.5 py-2.5 text-xs text-[#14171A] font-semibold placeholder:text-[#8A929B] focus:outline-none focus:ring-2 focus:ring-[#FFA4A4]"
                     />
+                  </div>
+
+                  {formError && (
+                    <p className="text-xs text-red-600 font-bold">
+                      {formError}
+                    </p>
+                  )}
+
+                  <div className="flex items-center gap-1.5 text-[11px] text-[#555E68]">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+                    <span>Zero-Spam: 1 Verified Counselor on WhatsApp. DPDP Act 2023 protected.</span>
                   </div>
                 </div>
 
@@ -389,7 +429,7 @@ export function UniversityFinderModal({ isOpen, onClose, defaultDegree }: Univer
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-3.5 bg-[#FFE15D] text-black font-semibold text-xs tracking-wider uppercase rounded-xl hover:bg-white transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50"
+                    className="w-full py-3.5 bg-[#14171A] text-[#FCF9EA] hover:bg-[#FFA4A4] hover:text-[#14171A] font-bold text-xs tracking-wider uppercase rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm disabled:opacity-50"
                   >
                     {isSubmitting ? (
                       <span>Matching Colleges...</span>
@@ -402,8 +442,8 @@ export function UniversityFinderModal({ isOpen, onClose, defaultDegree }: Univer
                     )}
                   </button>
 
-                  <div className="flex items-center justify-center gap-2 text-[11px] text-white/40 mt-3">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <div className="flex items-center justify-center gap-2 text-[11px] text-[#555E68] mt-3 font-medium">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                     <span>Zero spam guarantee. 100% free guidance from verified counselors.</span>
                   </div>
                 </div>
@@ -414,14 +454,14 @@ export function UniversityFinderModal({ isOpen, onClose, defaultDegree }: Univer
             {step === 5 && (
               <div className="space-y-5">
                 <div className="text-center">
-                  <div className="w-12 h-12 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mx-auto mb-2">
+                  <div className="w-12 h-12 rounded-full bg-[#BADFDB] flex items-center justify-center text-[#14171A] mx-auto mb-2">
                     <CheckCircle2 className="w-6 h-6" />
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-semibold text-white">
+                  <h3 className="text-xl sm:text-2xl font-black text-[#14171A]">
                     Here Are Your Top Matched Colleges!
                   </h3>
-                  <p className="text-xs text-white/60 mt-1">
-                    Based on your budget ({selectedBudget}) and goal for <span className="text-white font-medium">{selectedProgram}</span>.
+                  <p className="text-xs text-[#555E68] mt-1 font-medium">
+                    Based on your budget ({selectedBudget}) and goal for <span className="text-[#14171A] font-bold">{selectedProgram}</span>.
                   </p>
                 </div>
 
@@ -430,23 +470,23 @@ export function UniversityFinderModal({ isOpen, onClose, defaultDegree }: Univer
                   {matchedPrograms.map((prog) => (
                     <div 
                       key={prog.id}
-                      className="bg-black/50 border border-white/15 hover:border-white/30 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-colors"
+                      className="bg-[#FCF9EA] border border-[#14171A]/10 hover:border-[#14171A]/25 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-colors shadow-xs"
                     >
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-[#FFE15D]/15 text-[#FFE15D]">
-                            {prog.nebsaScholarship.maxWaiver} Fee Waiver Open
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#FFA4A4] text-[#14171A]">
+                            {prog.nexaScholarship.maxWaiver} Fee Waiver Open
                           </span>
-                          <span className="text-[10px] text-emerald-400 font-medium">UGC-DEB Approved</span>
+                          <span className="text-[10px] text-emerald-700 font-bold">UGC-DEB Approved</span>
                         </div>
-                        <h4 className="text-sm font-semibold text-white">{prog.name}</h4>
-                        <p className="text-xs text-white/50">{prog.university}</p>
-                        <div className="flex items-center gap-3 text-xs text-white/70 pt-1">
-                          <span>Total: <strong className="text-white">₹{(prog.totalFee / 100000).toFixed(2)}L</strong></span>
+                        <h4 className="text-sm font-bold text-[#14171A]">{prog.name}</h4>
+                        <p className="text-xs text-[#555E68] font-medium">{prog.university}</p>
+                        <div className="flex items-center gap-3 text-xs text-[#555E68] pt-1">
+                          <span>Total: <strong className="text-[#14171A]">₹{(prog.totalFee / 100000).toFixed(2)}L</strong></span>
                           <span>•</span>
-                          <span>EMI: <strong className="text-white">₹{prog.emiStartsAt}/mo</strong></span>
+                          <span>EMI: <strong className="text-[#14171A]">₹{prog.emiStartsAt}/mo</strong></span>
                           <span>•</span>
-                          <span>Avg CTC: <strong className="text-emerald-400">{prog.avgPlacementCtc}</strong></span>
+                          <span>Avg CTC: <strong className="text-emerald-700">{prog.avgPlacementCtc}</strong></span>
                         </div>
                       </div>
 
@@ -456,17 +496,17 @@ export function UniversityFinderModal({ isOpen, onClose, defaultDegree }: Univer
                           onClick={handleReset}
                           className="flex-1 sm:flex-initial"
                         >
-                          <button className="w-full px-3.5 py-2 bg-white text-black text-xs font-semibold rounded-xl hover:bg-[#FFE15D] transition-colors">
+                          <button className="w-full px-3.5 py-2 bg-[#14171A] text-[#FCF9EA] text-xs font-bold rounded-xl hover:bg-[#FFA4A4] hover:text-[#14171A] transition-colors">
                             View Syllabus
                           </button>
                         </Link>
 
                         <button
                           onClick={() => {
+                            sound.snap();
                             addToCompare(prog);
-                            alert(`Added ${prog.shortName} to your compare dock!`);
                           }}
-                          className="px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-medium transition-colors"
+                          className="px-3 py-2 bg-white border border-[#14171A]/10 hover:bg-[#BADFDB] text-[#14171A] rounded-xl text-xs font-bold transition-colors"
                           title="Add to compare matrix"
                         >
                           <Scale className="w-3.5 h-3.5" />
@@ -478,18 +518,18 @@ export function UniversityFinderModal({ isOpen, onClose, defaultDegree }: Univer
 
                 <div className="pt-2 flex flex-col sm:flex-row gap-2.5 justify-center">
                   <a
-                    href={`https://wa.me/918369938760?text=Hi%20NEBSA,%20I%20used%20the%20AI%20College%20Finder%20for%20${encodeURIComponent(selectedProgram)}.%20Please%20guide%20me%20with%20admissions.`}
+                    href={`https://wa.me/918825216881?text=Hi%20Harsh,%20I%20used%20the%20Nexa%20College%20Finder%20for%20${encodeURIComponent(selectedProgram)}.%20Please%20guide%20me%20with%20admissions.`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full sm:w-auto px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs rounded-xl flex items-center justify-center gap-2 transition-colors"
+                    className="w-full sm:w-auto px-6 py-3 bg-[#BADFDB] hover:bg-[#BADFDB]/80 text-[#14171A] font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-colors shadow-xs"
                   >
                     <Phone className="w-3.5 h-3.5" />
-                    Chat with Advisor for These Colleges
+                    Chat with Harsh on WhatsApp
                   </a>
 
                   <button
                     onClick={handleReset}
-                    className="w-full sm:w-auto px-5 py-3 bg-white/10 hover:bg-white/20 text-white text-xs font-medium rounded-xl transition-colors"
+                    className="w-full sm:w-auto px-5 py-3 bg-[#FCF9EA] border border-[#14171A]/10 text-[#14171A] text-xs font-bold rounded-xl hover:bg-white transition-colors"
                   >
                     Close
                   </button>

@@ -25,7 +25,7 @@ export interface Program {
   location: string;
   category: "Management" | "Technology & AI" | "Commerce & Finance" | "Engineering" | "Executive";
   degreeLevel: "Master's" | "Bachelor's" | "Executive" | "Certification";
-  mode: "100% Online" | "Campus Full-time" | "Hybrid / Blended";
+  mode: "Campus Full-time" | "Flexible Learning" | "Hybrid / Blended" | "Executive Weekend";
   duration: string;
   accreditations: string[];
   nirfRank?: string;
@@ -38,7 +38,7 @@ export interface Program {
   examMode: "100% Online Proctored" | "Designated Offline Centers" | "Continuous LMS Assessment";
   specializations: string[];
   eligibility: string;
-  nebsaScholarship: {
+  nexaScholarship: {
     maxWaiver: string;
     totalSeats: number;
     seatsRemaining: number;
@@ -46,6 +46,7 @@ export interface Program {
   };
   highlights: string[];
   bestFor: string;
+  coverImage?: string;
   syllabus?: ProgramSyllabus[];
   faqs?: ProgramFaq[];
   reviews?: ProgramReview[];
@@ -54,13 +55,13 @@ export interface Program {
 export const PROGRAMS_DATA: Program[] = [
   {
     id: "nmims-online-mba",
-    name: "Online MBA (Dual Specialization)",
-    shortName: "NMIMS Online MBA",
+    name: "MBA (Dual Specialization in Management & Tech)",
+    shortName: "NMIMS MBA",
     university: "NMIMS Global (Deemed University)",
-    location: "Mumbai, Maharashtra (Pan-India Online)",
+    location: "Mumbai Campus & Pan-India Centers",
     category: "Management",
     degreeLevel: "Master's",
-    mode: "100% Online",
+    mode: "Flexible Learning",
     duration: "2 Years (4 Semesters)",
     accreditations: ["UGC-DEB Entitled", "NAAC A++ Grade (3.59 CGPA)", "Category-1 Autonomy", "AICTE Approved"],
     nirfRank: "Top 25 NIRF Management",
@@ -73,7 +74,7 @@ export const PROGRAMS_DATA: Program[] = [
     examMode: "100% Online Proctored",
     specializations: ["FinTech", "Business Analytics", "Marketing Management", "Operations & Supply Chain", "HR Management"],
     eligibility: "Bachelor's Degree in any discipline with minimum 50% marks from a recognized university.",
-    nebsaScholarship: {
+    nexaScholarship: {
       maxWaiver: "40%",
       totalSeats: 35,
       seatsRemaining: 9,
@@ -85,6 +86,7 @@ export const PROGRAMS_DATA: Program[] = [
       "Dedicated portal with 800+ hiring partners and resume review"
     ],
     bestFor: "Working professionals seeking corporate leadership and management roles without leaving work.",
+    coverImage: "/images/hero-student.jpg",
     syllabus: [
       {
         semester: "Semester 1",
@@ -114,7 +116,7 @@ export const PROGRAMS_DATA: Program[] = [
       },
       {
         question: "Is No-Cost EMI available for paying fees?",
-        answer: "Yes, NEBSA provides 0% interest monthly EMI plans across 12, 18, and 24-month tenures through approved education financing partners (starts at ₹8,166/month)."
+        answer: "Yes, Nexa Campus provides 0% interest monthly EMI plans across 12, 18, and 24-month tenures through approved education financing partners (starts at ₹8,166/month)."
       }
     ],
     reviews: [
@@ -136,13 +138,13 @@ export const PROGRAMS_DATA: Program[] = [
   },
   {
     id: "manipal-online-mca",
-    name: "Online MCA (Cloud Computing & AI)",
-    shortName: "Manipal Online MCA",
+    name: "MCA (Cloud Computing & Artificial Intelligence)",
+    shortName: "Manipal MCA",
     university: "Manipal University Jaipur (MUJ)",
-    location: "Jaipur, Rajasthan (Pan-India Online)",
+    location: "Jaipur Residential Campus & Labs",
     category: "Technology & AI",
     degreeLevel: "Master's",
-    mode: "100% Online",
+    mode: "Campus Full-time",
     duration: "2 Years (4 Semesters)",
     accreditations: ["UGC-DEB Entitled", "NAAC A+ Grade", "AICTE Approved", "WES Recognized"],
     nirfRank: "NIRF Top 60 Multi-Disciplinary",
@@ -155,7 +157,7 @@ export const PROGRAMS_DATA: Program[] = [
     examMode: "100% Online Proctored",
     specializations: ["Cloud Computing", "Artificial Intelligence & ML", "Cybersecurity", "Full Stack Development"],
     eligibility: "BCA/B.Sc (CS/IT) or graduation with Mathematics at 10+2 level with min 50% aggregate.",
-    nebsaScholarship: {
+    nexaScholarship: {
       maxWaiver: "50%",
       totalSeats: 45,
       seatsRemaining: 14,
@@ -167,6 +169,7 @@ export const PROGRAMS_DATA: Program[] = [
       "Placement assistance with 500+ tech enterprise drives"
     ],
     bestFor: "Software engineers, BCA grads, and IT professionals aiming for Cloud/AI Architect trajectories.",
+    coverImage: "/images/tech-learning.jpg",
     syllabus: [
       {
         semester: "Semester 1",
@@ -207,13 +210,13 @@ export const PROGRAMS_DATA: Program[] = [
   },
   {
     id: "amity-online-mba",
-    name: "Online MBA (Global Accreditations)",
-    shortName: "Amity Online MBA",
-    university: "Amity University Online",
-    location: "Noida, UP (Pan-India Online)",
+    name: "MBA (Global Leadership & Corporate Strategy)",
+    shortName: "Amity MBA",
+    university: "Amity University",
+    location: "Noida NCR Main Campus",
     category: "Management",
     degreeLevel: "Master's",
-    mode: "100% Online",
+    mode: "Hybrid / Blended",
     duration: "2 Years (4 Semesters)",
     accreditations: ["UGC-DEB Entitled", "NAAC A+ Grade", "QS World Ranked #37 Asia", "WES & AIU Recognized"],
     nirfRank: "Top 35 NIRF Universities",
@@ -226,7 +229,7 @@ export const PROGRAMS_DATA: Program[] = [
     examMode: "100% Online Proctored",
     specializations: ["Digital Marketing", "International Business", "Data Science", "Hospitality Management"],
     eligibility: "Graduation with minimum 40% aggregate in any discipline.",
-    nebsaScholarship: {
+    nexaScholarship: {
       maxWaiver: "60%",
       totalSeats: 50,
       seatsRemaining: 11,
@@ -238,6 +241,7 @@ export const PROGRAMS_DATA: Program[] = [
       "Robust career mentoring and CV curation portal"
     ],
     bestFor: "Learners seeking recognized international brand credentials and flexibility.",
+    coverImage: "/images/campus-architecture.jpg",
     syllabus: [
       {
         semester: "Semester 1",
@@ -274,13 +278,13 @@ export const PROGRAMS_DATA: Program[] = [
   },
   {
     id: "chandigarh-online-bba",
-    name: "Online BBA (Entrepreneurship & Digital Marketing)",
-    shortName: "CU Online BBA",
-    university: "Chandigarh University Online",
-    location: "Mohali, Punjab (Pan-India Online)",
+    name: "BBA (Entrepreneurship & Digital Business)",
+    shortName: "CU BBA",
+    university: "Chandigarh University",
+    location: "Mohali, Punjab Campus",
     category: "Commerce & Finance",
     degreeLevel: "Bachelor's",
-    mode: "100% Online",
+    mode: "Campus Full-time",
     duration: "3 Years (6 Semesters)",
     accreditations: ["UGC-DEB Entitled", "NAAC A+ Grade (3.28 CGPA)", "AICTE Approved"],
     nirfRank: "NIRF Rank #27 Overall",
@@ -293,7 +297,7 @@ export const PROGRAMS_DATA: Program[] = [
     examMode: "100% Online Proctored",
     specializations: ["Digital Marketing", "Retail & E-Commerce", "Family Business & Startup Management"],
     eligibility: "10+2 or equivalent in any stream with minimum 50% marks from recognized board.",
-    nebsaScholarship: {
+    nexaScholarship: {
       maxWaiver: "75%",
       totalSeats: 60,
       seatsRemaining: 18,
@@ -305,6 +309,7 @@ export const PROGRAMS_DATA: Program[] = [
       "Access to CU corporate incubation network and seed pitch competitions"
     ],
     bestFor: "High-school passouts and working youth looking to launch businesses or enterprise commercial careers.",
+    coverImage: "/images/hero-student.jpg",
     syllabus: [
       {
         semester: "Year 1 (Sem 1 & 2)",
@@ -337,13 +342,13 @@ export const PROGRAMS_DATA: Program[] = [
   },
   {
     id: "dpu-online-mba",
-    name: "Online MBA (Healthcare & Hospital Management)",
-    shortName: "DPU Online MBA",
-    university: "Dr. D.Y. Patil Vidyapeeth (Deemed-to-be-University)",
-    location: "Pune, Maharashtra",
+    name: "MBA (Healthcare & Hospital Administration)",
+    shortName: "DPU MBA",
+    university: "Dr. D.Y. Patil Vidyapeeth",
+    location: "Pune Medical Campus, Maharashtra",
     category: "Management",
     degreeLevel: "Master's",
-    mode: "100% Online",
+    mode: "Campus Full-time",
     duration: "2 Years (4 Semesters)",
     accreditations: ["UGC-DEB Entitled", "NAAC A++ Grade (3.64 CGPA)", "AICTE Approved", "Category-1 Autonomy"],
     nirfRank: "NIRF Top 45 Universities",
@@ -356,7 +361,7 @@ export const PROGRAMS_DATA: Program[] = [
     examMode: "100% Online Proctored",
     specializations: ["Hospital & Healthcare Administration", "Pharma Management", "Operations Management"],
     eligibility: "Graduation in any stream with 50% aggregate (45% for reserved category).",
-    nebsaScholarship: {
+    nexaScholarship: {
       maxWaiver: "50%",
       totalSeats: 40,
       seatsRemaining: 8,
@@ -367,17 +372,18 @@ export const PROGRAMS_DATA: Program[] = [
       "Weekend masterclasses by chief medical officers and hospital administrators",
       "End-to-end placement assistance with healthcare chains"
     ],
-    bestFor: "Doctors, pharma executives, nurses, and biology grads transitioning into healthcare administration."
+    bestFor: "Doctors, pharma executives, nurses, and biology grads transitioning into healthcare administration.",
+    coverImage: "/images/university-boardroom.jpg"
   },
   {
     id: "jain-online-mca",
-    name: "Online MCA (Artificial Intelligence & Data Science)",
-    shortName: "Jain Online MCA",
+    name: "MCA (Artificial Intelligence & Data Science)",
+    shortName: "Jain MCA",
     university: "Jain (Deemed-to-be University)",
-    location: "Bangalore, Karnataka",
+    location: "Bangalore Tech Hub, Karnataka",
     category: "Technology & AI",
     degreeLevel: "Master's",
-    mode: "100% Online",
+    mode: "Campus Full-time",
     duration: "2 Years (4 Semesters)",
     accreditations: ["UGC-DEB Entitled", "NAAC A++ Grade (3.71 CGPA)", "AICTE Approved", "NIRF Top 70"],
     nirfRank: "NIRF Top 70 Universities",
@@ -390,7 +396,7 @@ export const PROGRAMS_DATA: Program[] = [
     examMode: "100% Online Proctored",
     specializations: ["Artificial Intelligence", "Data Engineering", "Machine Learning & Deep Learning"],
     eligibility: "BCA or Bachelor's Degree in CS/IT or equivalent with min 50% marks.",
-    nebsaScholarship: {
+    nexaScholarship: {
       maxWaiver: "45%",
       totalSeats: 30,
       seatsRemaining: 7,
@@ -401,7 +407,8 @@ export const PROGRAMS_DATA: Program[] = [
       "Hands-on capstone projects deployed to GitHub and cloud repositories",
       "Over 2,000 corporate hiring tie-ups with active campus placement drives"
     ],
-    bestFor: "Developers seeking rapid promotion into AI engineering and Data Science roles."
+    bestFor: "Developers seeking rapid promotion into AI engineering and Data Science roles.",
+    coverImage: "/images/tech-learning.jpg"
   },
   {
     id: "shivalik-btech-civil",
@@ -423,8 +430,8 @@ export const PROGRAMS_DATA: Program[] = [
     topRecruiters: ["L&T Construction", "Tata Projects", "Afcons", "Shapoorji Pallonji"],
     examMode: "Designated Offline Centers",
     specializations: ["Smart City Infrastructure", "BIM & Structural Dynamics", "Geo-informatics"],
-    eligibility: "10+2 PCM with min 55% aggregate or valid state entrance / NEBSA score.",
-    nebsaScholarship: {
+    eligibility: "10+2 PCM with min 55% aggregate or valid state entrance / Nexa aptitude score.",
+    nexaScholarship: {
       maxWaiver: "100%",
       totalSeats: 40,
       seatsRemaining: 12,
@@ -435,7 +442,8 @@ export const PROGRAMS_DATA: Program[] = [
       "Industrial tie-up with L&T co-op apprentice program",
       "Advanced seismic resistance and CAD modeling labs on campus"
     ],
-    bestFor: "Students committed to heavy engineering, civil architecture, and state infrastructure projects."
+    bestFor: "Students committed to heavy engineering, civil architecture, and state infrastructure projects.",
+    coverImage: "/images/campus-architecture.jpg"
   },
   {
     id: "shoolini-exec-mba",
@@ -458,7 +466,7 @@ export const PROGRAMS_DATA: Program[] = [
     examMode: "Continuous LMS Assessment",
     specializations: ["Generative AI in Strategy", "Corporate Governance", "Global Supply Chain"],
     eligibility: "Bachelor's Degree with minimum 3+ years of verifiable professional work experience.",
-    nebsaScholarship: {
+    nexaScholarship: {
       maxWaiver: "50%",
       totalSeats: 25,
       seatsRemaining: 5,
@@ -469,6 +477,7 @@ export const PROGRAMS_DATA: Program[] = [
       "Personal 1-on-1 executive coaching from former C-Suite executives",
       "Network with mid-to-senior corporate directors and founders"
     ],
-    bestFor: "Managers with 3+ years experience looking to break into Director or VP roles."
+    bestFor: "Managers with 3+ years experience looking to break into Director or VP roles.",
+    coverImage: "/images/university-boardroom.jpg"
   }
 ];

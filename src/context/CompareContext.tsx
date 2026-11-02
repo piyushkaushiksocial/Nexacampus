@@ -22,7 +22,7 @@ export function CompareProvider({ children }: { children: React.ReactNode }) {
   // Initialize with 2 pre-selected programs so first-time visitors immediately discover the compare power!
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("nebsa_compare_list");
+      const saved = localStorage.getItem("nexa_compare_list");
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
@@ -52,7 +52,7 @@ export function CompareProvider({ children }: { children: React.ReactNode }) {
     const updated = [...selectedPrograms, program];
     setSelectedPrograms(updated);
     try {
-      localStorage.setItem("nebsa_compare_list", JSON.stringify(updated));
+      localStorage.setItem("nexa_compare_list", JSON.stringify(updated));
     } catch {}
     return true;
   };
@@ -61,14 +61,14 @@ export function CompareProvider({ children }: { children: React.ReactNode }) {
     const updated = selectedPrograms.filter((p) => p.id !== id);
     setSelectedPrograms(updated);
     try {
-      localStorage.setItem("nebsa_compare_list", JSON.stringify(updated));
+      localStorage.setItem("nexa_compare_list", JSON.stringify(updated));
     } catch {}
   };
 
   const clearCompare = () => {
     setSelectedPrograms([]);
     try {
-      localStorage.removeItem("nebsa_compare_list");
+      localStorage.removeItem("nexa_compare_list");
     } catch {}
   };
 
