@@ -185,7 +185,7 @@ export function InteractiveProgramFilter() {
                     <div>
                       <div className="flex items-center justify-between gap-2 mb-2">
                         <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-[#BADFDB] text-[#14171A]">
-                          NAAC {prog.naacGrade}
+                          {prog.accreditations.find((a) => a.includes("NAAC")) || prog.accreditations[0] || "NAAC A+"}
                         </span>
                         <span className="text-[10px] text-emerald-700 font-bold">
                           UGC Entitled
